@@ -64,5 +64,65 @@ public class VarastoTest {
         // varastossa pitäisi olla tilaa 10 - 8 + 2 eli 4
         assertEquals(4, varasto.paljonkoMahtuu(), vertailuTarkkuus);
     }
-
+    
+    @Test
+    public void stringMuotoToimii() {
+        String stringi = varasto.toString();
+        assertEquals("saldo = 0.0, vielä tilaa 10.0", stringi);
+    }
+    
+    @Test
+    public void huonoLyhytKonstruktoriToimii() {
+        varasto = new Varasto(-2);
+        assertEquals(0.0, varasto.getTilavuus(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void pitkäKonstruktoriToimii() {
+        //normaali toiminta
+        varasto = new Varasto(10,0);
+        assertEquals(10.0, varasto.getTilavuus(), vertailuTarkkuus);
+        assertEquals(0.0, varasto.getSaldo(), vertailuTarkkuus);
+        
+        //saldo yli tilasta
+        varasto = new Varasto(6,10);
+        assertEquals(6.0, varasto.getTilavuus(), vertailuTarkkuus);
+        assertEquals(6.0, varasto.getSaldo(), vertailuTarkkuus);
+        
+        //negatiivinen tila ja saldo
+        varasto = new Varasto(-2,-2);
+        assertEquals(0.0, varasto.getTilavuus(), vertailuTarkkuus);
+        assertEquals(0.0, varasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void ylitäyttöTäyttääMaksimin() {
+        varasto.lisaaVarastoon(20);
+        assertEquals(0.0, varasto.paljonkoMahtuu(), vertailuTarkkuus);
+        assertEquals(10.0, varasto.getSaldo(), vertailuTarkkuus); 
+    }
+    
+    @Test
+    public void negatiivinenLisäysEiTeeMitään() {
+        varasto.lisaaVarastoon(-20);
+        assertEquals(10.0, varasto.paljonkoMahtuu(), vertailuTarkkuus);
+        assertEquals(0.0, varasto.getSaldo(), vertailuTarkkuus); 
+    }
+    
+    @Test
+    public void negatiivinenOttoEiTeeMitään() {
+        varasto.lisaaVarastoon(5);
+        assertEquals(5.0, varasto.getSaldo(), vertailuTarkkuus); 
+        varasto.otaVarastosta(-20);
+        assertEquals(5.0, varasto.getSaldo(), vertailuTarkkuus); 
+    }
+    
+    @Test
+    public void kunOttoYlittääSaldonAnnetaanKaikki() {
+        varasto.lisaaVarastoon(5);
+        assertEquals(5.0, varasto.getSaldo(), vertailuTarkkuus); 
+       
+        assertEquals(5.0, varasto.otaVarastosta(7), vertailuTarkkuus);
+        assertEquals(0.0, varasto.getSaldo(), vertailuTarkkuus);
+    }
 }
