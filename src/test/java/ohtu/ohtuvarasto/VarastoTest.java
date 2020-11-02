@@ -79,7 +79,7 @@ public class VarastoTest {
     
     @Test
     public void pitkäKonstruktoriToimii() {
-        //normaali toiminta
+        //odotettu toiminta
         varasto = new Varasto(10,0);
         assertEquals(10.0, varasto.getTilavuus(), vertailuTarkkuus);
         assertEquals(0.0, varasto.getSaldo(), vertailuTarkkuus);
